@@ -27,8 +27,8 @@ Instead of simple text upload, we implemented a robust ETL pipeline for PDF inge
     - Implemented `RecursiveCharacterTextSplitter` from `@pinecone-database/doc-splitter` to chunk text with context-aware boundaries, optimizing for LLM context windows.
     - **Optimization**: Strings are truncated to 36,000 bytes to prevent metadata overflow in vector stores.
 4.  **Embedding Generation**:
-    - Model: `text-embedding-3-small` via `openai-edge`.
-    - **Dimensionality Reduction**: Configured to 1024 dimensions (vs standard 1536) to balance semantic accuracy with storage costs/latency.
+    - Model: `text-embedding-ada-002` via `openai-edge`.
+    - **Dimensionality Reduction**: Configured to 1536 dimensions for best results.
 5.  **Vector Upsert**:
     - Vectors are upserted into **Namespaced** Pinecone indices.
     - Namespace Strategy: `md5` hash of the file key/content ensures collision-free multi-tenancy within a single index.
