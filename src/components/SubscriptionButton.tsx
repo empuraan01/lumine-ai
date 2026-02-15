@@ -19,7 +19,7 @@ const SubscriptionButton = (props: Props) => {
     }
   };
   return (
-    <Button disabled={loading} onClick={handleSubscription} className = "w-full justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-none hover:opacity-90 transition-opacity font-semibold">
+    <Button disabled={loading} onClick={handleSubscription} className = "justify-center bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-none hover:opacity-90 transition-opacity font-semibold">
       {props.isPro ? "Manage Subscriptions" : "Get Pro"}
     </Button>
   );
