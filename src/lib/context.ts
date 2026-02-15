@@ -10,11 +10,10 @@ export async function getMatchesFromEmbeddings(embeddings: number[], file_key: s
     try {
         const namespace = convertToASCII(file_key);
         const pineconeNamespace = index.namespace(namespace);
-        const queryResult = await index.query({
+        const queryResult = await pineconeNamespace.query({
             topK: 5,
             vector: embeddings,
             includeMetadata: true,
-            namespace
         })
         return queryResult.matches || [];
     } catch (error) {
@@ -29,7 +28,7 @@ export async function getContext(query: string, file_key: string) {
     const queryEmbeddings = await getEmbeddings(query);
     const matches = await getMatchesFromEmbeddings(queryEmbeddings, file_key);
 
-    const qualifyingDocs = matches.filter((match) => match.score && match.score > 0.7);
+    const qualifyingDocs = matches.filter((match) => match.score !== undefined);
 
     type Metadata = {
         text: string;
