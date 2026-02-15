@@ -33,23 +33,18 @@ export async function loadS3IntoPineCone(file_key: string) {
     const pages = await loader.load() as PDFPage[];
     console.log("File loaded successfully...");
 
-
     const documents = await Promise.all(pages.map(prepareDocument));
 
     const vectors = await Promise.all(documents.flat().map(embedDocument));
 
     const client = await getPineconeClient();
-    const pineconeIndex = await client.Index(process.env.PINECONE_INDEX_NAME!);
+    const pineconeIndex = await client.index(process.env.PINECONE_INDEX_NAME!);
     console.log("Inserting vector to PineconeDB");
 
     const namespace = convertToASCII(file_key);
     const pineconeNamespace = pineconeIndex.namespace(namespace);
 
-    const chunkSize = 100;
-    for (let i = 0; i < vectors.length; i += chunkSize) {
-        const chunk = vectors.slice(i, i + chunkSize);
-        await pineconeNamespace.upsert({ records: chunk });
-    }
+    await pineconeNamespace.upsert(vectors);
 
     console.log("Successfully inserted vectors into PineconeDB");
     return documents[0];
